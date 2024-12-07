@@ -28,7 +28,7 @@ jobs:
       - name: Install expect
         run: |
           sudo apt-get update
-          sudo apt-get install -y expect  # 添加安装expect的步骤
+          sudo apt-get install -y expect
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
@@ -49,7 +49,7 @@ jobs:
       - name: Install Android dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386
+          sudo apt-get install -y libc6-i386 lib32ncurses5 lib32stdc++6 libbz2-1.0:i386
           sudo apt-get install -y openjdk-11-jdk-headless
 
       - name: Build the Android library
