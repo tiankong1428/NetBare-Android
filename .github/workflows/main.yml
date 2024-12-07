@@ -2,7 +2,7 @@ name: Build Netbare-Core Android Library
 
 # 手动触发工作流
 on:
-  workflow_dispatch:  # 使工作流可以通过手动触发
+  workflow_dispatch:
     inputs:
       java-version:
         description: 'JDK version'
@@ -24,12 +24,12 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: ${{ github.event.inputs.java-version }}  # 使用手动输入的 JDK 版本
+          java-version: ${{ github.event.inputs.java-version }}
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
         with:
-          sdk-version: ${{ github.event.inputs.sdk-version }}  # 使用手动输入的 SDK 版本
+          sdk-version: ${{ github.event.inputs.sdk-version }}
 
       - name: Grant permissions for Android SDK
         run: |
@@ -47,7 +47,7 @@ jobs:
           ./gradlew assembleRelease
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: netbare-core-aar
           path: netbare-core/build/outputs/aar/netbare-core-release.aar
