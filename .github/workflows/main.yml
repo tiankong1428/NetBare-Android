@@ -23,7 +23,12 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: ${{ github.event.inputs.java-version }}
-          distribution: 'temurin'  # 根据前面建议修改为'temurin'
+          distribution: 'temurin'
+
+      - name: Install expect
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y expect  # 添加安装expect的步骤
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
@@ -33,7 +38,6 @@ jobs:
       - name: Grant permissions for Android SDK
         run: |
           chmod +x $ANDROID_HOME/tools/bin/sdkmanager
-          # 使用expect工具处理许可确认，避免管道通信问题，若环境没预装expect需先安装（sudo apt-get install expect）
           expect -c '
             spawn $ANDROID_HOME/tools/bin/sdkmanager --licenses
             expect {
@@ -46,7 +50,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386
-          sudo apt-get install -y openjdk-11-jdk-headless  # 根据实际使用的Java版本调整此处，添加对应的Java开发包以提供缺失的XML相关类
+          sudo apt-get install -y openjdk-11-jdk-headless
 
       - name: Build the Android library
         run: |
