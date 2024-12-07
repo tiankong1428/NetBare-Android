@@ -50,7 +50,7 @@ jobs:
         run: |
           sudo dpkg --add-architecture i386  # 启用32位架构支持
           sudo apt-get update
-          sudo apt-get install -y libc6-i386 libncurses5 libbz2-1.0-dev
+          sudo apt-get install -y libc6-i386 libncurses5 libbz2-dev  # 修改为正确的包名
           sudo apt-get install -y openjdk-11-jdk-headless
 
       - name: Build the Android library
