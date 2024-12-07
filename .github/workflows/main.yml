@@ -2,36 +2,34 @@ name: Build Netbare-Core Android Library
 on:
   push:
     branches:
-      - main  # 可按照实际使用的分支进行替换，用于指定触发工作流的分支
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2  # 从仓库中检出代码到运行环境
+        uses: actions/checkout@v2
       - name: Set up JDK
-        uses: actions/setup-java@v1  # 设置Java开发环境，默认安装OpenJDK
+        uses: actions/setup-java@v1
         with:
-          java-version: '11'  # 根据项目需求设定合适的Java版本，此处假设为11
+          java-version: '11'
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v2  # 安装并配置Android SDK
+        uses: android-actions/setup-android@v2
         with:
-          sdk-version: 28  # 依据项目build.gradle里compileSdkVersion的设置来配置对应的SDK版本
+          sdk-version: 28
       - name: Grant permissions for Android SDK
-        run:
-          - chmod +x $ANDROID_HOME/tools/bin/sdkmanager
-          - yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+        run: |
+          chmod +x $ANDROID_HOME/tools/bin/sdkmanager
+          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
       - name: Install Android dependencies
-        run:
-          - sudo apt-get update
-          - sudo apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386
       - name: Build the Android library
-        run:
-          - cd netbare-core
-          -./gradlew assembleRelease  # 使用Gradle构建发布版本的Android库（生成AAR文件）
+        run: |
+          cd netbare-core
       - name: Upload artifact
-        uses: actions/upload-artifact@v2  # 将打包好的AAR文件作为构建产物上传
+        uses: actions/upload-artifact@v2
         with:
           name: netbare-core-aar
-          path:
-            - netbare-core/build/outputs/aar/netbare-core-release.aar  # 将路径放到列表形式中，进一步符合yaml语法规范，可根据实际情况调整具体路径
+          path: netbare-core/build/outputs/aar/netbare-core-release.aar
