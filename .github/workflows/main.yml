@@ -52,7 +52,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libc6-i386 libncurses5 libbz2-dev  # 修改为正确的包名
           sudo apt-get install -y openjdk-11-jdk-headless
-
+      - name: Clean build directory
+        run: |
+         ./gradlew clean
       - name: Build the Android library
         run: |
           ./gradlew assembleRelease
