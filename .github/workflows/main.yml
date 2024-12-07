@@ -1,0 +1,40 @@
+name: Build Netbare-Core Android Library
+on:
+  push:
+    branches:
+      - main  # 你可根据实际使用的分支进行替换，如'master'等，指定触发工作流的分支
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # 检出仓库中的代码到运行环境中
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1  # 设置Java开发环境，默认安装OpenJDK
+        with:
+          java-version: '11'  # 根据项目需求设定合适的Java版本，这里假设为11
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2  # 安装并配置Android SDK
+        with:
+          sdk-version: 28  # 根据项目中 compileSdkVersion 配置的28来设定这里的SDK版本
+
+      - name: Grant permissions for Android SDK
+        run: chmod +x $ANDROID_HOME/tools/bin/sdkmanager && yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+
+      - name: Install Android dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386
+
+      - name: Build the Android library
+        run: |
+          cd netbare-core  # 进入netbare-core目录，此处路径基于仓库根目录，可根据实际情况调整
+         ./gradlew assembleRelease  # 使用Gradle构建发布版本的Android库（生成AAR文件）
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2  # 将打包好的AAR文件作为构建产物上传
+        with:
+          name: netbare-core-aar
+          path: netbare-core/build/outputs/aar/*.aar  # 通配符 * 匹配所有生成的AAR文件，确保能获取到，路径根据Gradle构建输出的实际路径来，这里假设是这样的路径
