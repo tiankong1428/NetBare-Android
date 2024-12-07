@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: ${{ github.event.inputs.java-version }}
-          distribution: 'adoptopenjdk'  # 添加 distribution 参数
+          distribution: 'temurin'  # 添加 distribution 参数
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
