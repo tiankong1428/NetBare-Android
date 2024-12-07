@@ -2,21 +2,21 @@ name: Build Netbare-Core Android Library
 on:
   push:
     branches:
-      - main  # 可根据实际使用的分支进行替换，以此指定触发工作流的分支
+      - main  # 可按照实际使用的分支进行替换，用于指定触发工作流的分支
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2  # 检出仓库中的代码到运行环境中
+        uses: actions/checkout@v2  # 从仓库中检出代码到运行环境
       - name: Set up JDK
         uses: actions/setup-java@v1  # 设置Java开发环境，默认安装OpenJDK
         with:
-          java-version: '11'  # 根据项目实际需求确定Java版本，这里假设为11
+          java-version: '11'  # 根据项目需求设定合适的Java版本，此处假设为11
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2  # 安装并配置Android SDK
         with:
-          sdk-version: 28  # 匹配项目 build.gradle 中 compileSdkVersion 的设置
+          sdk-version: 28  # 依据项目build.gradle里compileSdkVersion的设置来配置对应的SDK版本
       - name: Grant permissions for Android SDK
         run:
           - chmod +x $ANDROID_HOME/tools/bin/sdkmanager
@@ -33,4 +33,5 @@ jobs:
         uses: actions/upload-artifact@v2  # 将打包好的AAR文件作为构建产物上传
         with:
           name: netbare-core-aar
-          path: netbare-core/build/outputs/aar/netbare-core-release.aar  # 根据实际情况调整路径，指定具体的AAR文件路径
+          path:
+            - netbare-core/build/outputs/aar/netbare-core-release.aar  # 将路径放到列表形式中，进一步符合yaml语法规范，可根据实际情况调整具体路径
