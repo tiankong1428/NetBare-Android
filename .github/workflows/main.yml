@@ -30,11 +30,11 @@ jobs:
 
       - name: Build the Android library
         run: |
-          cd netbare-core  # 进入netbare-core目录，此处路径基于仓库根目录，可根据实际情况调整
+          cd netbare-core
          ./gradlew assembleRelease  # 使用Gradle构建发布版本的Android库（生成AAR文件）
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2  # 将打包好的AAR文件作为构建产物上传
         with:
           name: netbare-core-aar
-          path: netbare-core/build/outputs/aar/*.aar  # 通配符 * 匹配所有生成的AAR文件，确保能获取到，路径根据Gradle构建输出的实际路径来，这里假设是这样的路径
+          path: netbare-core/build/outputs/aar/netbare-core-release.aar  # 指定具体的AAR文件路径，如果确定只会生成这一个AAR文件的话，避免通配符可能导致的语法问题，可根据实际情况调整路径
