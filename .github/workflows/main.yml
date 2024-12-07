@@ -55,7 +55,6 @@ jobs:
 
       - name: Build the Android library
         run: |
-          cd netbare-core
           ./gradlew assembleRelease
  
       - name: Upload artifact
