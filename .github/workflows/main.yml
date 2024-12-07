@@ -48,15 +48,16 @@ jobs:
 
       - name: Install Android dependencies
         run: |
+          sudo apt-add-repository universe  # 添加universe仓库源
           sudo apt-get update
-          sudo apt-get install -y libc6-i386 lib32ncurses5 lib32stdc++6 libbz2-1.0:i386
+          sudo apt-get install -y libc6-i386 libncurses5:i386 lib32stdc++6 libbz2-1.0-dev:i386
           sudo apt-get install -y openjdk-11-jdk-headless
 
       - name: Build the Android library
         run: |
           cd netbare-core
           ./gradlew assembleRelease
-
+ 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
