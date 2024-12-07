@@ -2,36 +2,35 @@ name: Build Netbare-Core Android Library
 on:
   push:
     branches:
-      - main  # 可按需替换成实际使用的分支名，用于指定触发工作流的分支
+      - main  # 可根据实际使用的分支进行替换，以此指定触发工作流的分支
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2  # 从仓库检出代码到运行环境中
+        uses: actions/checkout@v2  # 检出仓库中的代码到运行环境中
       - name: Set up JDK
         uses: actions/setup-java@v1  # 设置Java开发环境，默认安装OpenJDK
         with:
-          java-version: '11'  # 根据项目适配情况设定合适的Java版本，此处假设为11
+          java-version: '11'  # 根据项目实际需求确定Java版本，这里假设为11
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2  # 安装并配置Android SDK
         with:
-          sdk-version: 28  # 按照项目 build.gradle 里 compileSdkVersion 的设置配置对应SDK版本
+          sdk-version: 28  # 匹配项目 build.gradle 中 compileSdkVersion 的设置
       - name: Grant permissions for Android SDK
-        run: |
-          chmod +x $ANDROID_HOME/tools/bin/sdkmanager
-          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+        run:
+          - chmod +x $ANDROID_HOME/tools/bin/sdkmanager
+          - yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
       - name: Install Android dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386
+        run:
+          - sudo apt-get update
+          - sudo apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386
       - name: Build the Android library
-        run: |
-          cd netbare-core
-          # 注意下面这行命令前多了个空格缩进，确保符合yaml语法要求，每行命令的缩进保持一致
-         ./gradlew assembleRelease  # 使用Gradle构建发布版本的Android库（生成AAR文件）
+        run:
+          - cd netbare-core
+          -./gradlew assembleRelease  # 使用Gradle构建发布版本的Android库（生成AAR文件）
       - name: Upload artifact
         uses: actions/upload-artifact@v2  # 将打包好的AAR文件作为构建产物上传
         with:
           name: netbare-core-aar
-          path: netbare-core/build/outputs/aar/netbare-core-release.aar  # 明确指定具体的AAR文件路径，避免语法问题，可根据实际情况调整
+          path: netbare-core/build/outputs/aar/netbare-core-release.aar  # 根据实际情况调整路径，指定具体的AAR文件路径
